@@ -1,17 +1,30 @@
-import trash from '../../assets/trash.svg'
-import styles from './styles.module.css'
+import { useState } from 'react';
+import trash from '../../assets/trash.svg';
+import styles from './styles.module.css';
 
-interface TaskProps {
-  content: string
-  done: boolean
+export interface TaskProps {
+  name: string;
+  onDelete: (name: string) => void;
 }
 
-export default function Task({ content, done }: TaskProps) {
+export default function Task({ name, onDelete }: TaskProps) {
+  const [done, setDone] = useState(false);
+
+  const handleCheckmark = () => {
+    setDone((state) => {
+      return !state;
+    });
+  };
+
+  const handleDelete = () => {
+    onDelete(name);
+  };
+
   return (
     <div className={done ? styles['task-done'] : styles.task}>
-      <span />
-      <p>{content}</p>
-      <img className={styles.trash} src={trash} />
+      <span onClick={() => handleCheckmark()} />
+      <p>{name}</p>
+      <img className={styles.trash} src={trash} onClick={handleDelete} />
     </div>
-  )
+  );
 }

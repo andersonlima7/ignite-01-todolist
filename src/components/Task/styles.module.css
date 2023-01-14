@@ -1,5 +1,6 @@
 .task,
 .task-done {
+  position: relative;
   width: 100%;
   max-width: 46rem;
   min-height: 4.5rem;
@@ -57,4 +58,6 @@
   width: 24px;
   height: 24px;
   cursor: pointer;
+  position: absolute;
+  right: 1rem;
 }

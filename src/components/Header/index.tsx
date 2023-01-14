@@ -1,5 +1,5 @@
-import rocket from '../../assets/rocket.svg'
-import styles from './styles.module.css'
+import rocket from '../../assets/rocket.svg';
+import styles from './styles.module.css';
 
 export default function Header() {
   return (
@@ -10,5 +10,5 @@ export default function Header() {
         <span>do</span>
       </div>
     </header>
-  )
+  );
 }
