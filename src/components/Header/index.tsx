@@ -1,5 +1,4 @@
 import rocket from '../../assets/rocket.svg'
-
 import styles from './styles.module.css'
 
 export default function Header() {
