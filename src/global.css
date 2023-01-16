@@ -104,10 +104,32 @@ body .tasks-stats {
   max-width: 736px;
 }
 
+body .tasks-stats > p {
+  display: inline;
+}
+
 body .tasks-stats p:nth-child(1) {
   color: var(--blue);
 }
 
-body .tasks-stats p:nth-child(2) {
+body .tasks-stats p:nth-child(3) {
   color: var(--purple);
+}
+
+.stats-number {
+  display: inline-flex;
+  height: 19px;
+  padding: 2px 8px;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--gray-100);
+  background-color: var(--gray-400);
+  border-radius: 8px;
+}
+.stats {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }

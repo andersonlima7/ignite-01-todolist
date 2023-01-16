@@ -5,19 +5,22 @@ import styles from './styles.module.css';
 export interface TaskProps {
   name: string;
   onDelete: (name: string) => void;
+  increaseDoneCount: (increase: boolean) => void;
 }
 
-export default function Task({ name, onDelete }: TaskProps) {
+export default function Task({ name, onDelete, increaseDoneCount }: TaskProps) {
   const [done, setDone] = useState(false);
 
   const handleCheckmark = () => {
-    setDone((state) => {
-      return !state;
-    });
+    const state = done;
+    setDone(!state);
+    if (!state) increaseDoneCount(true);
+    else increaseDoneCount(false);
   };
 
   const handleDelete = () => {
     onDelete(name);
+    if (done) increaseDoneCount(false);
   };
 
   return (
