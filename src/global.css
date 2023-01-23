@@ -112,7 +112,7 @@ body .tasks-stats p:nth-child(1) {
   color: var(--blue);
 }
 
-body .tasks-stats p:nth-child(3) {
+body .stats p:nth-child(1) {
   color: var(--purple);
 }
 

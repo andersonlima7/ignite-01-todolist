@@ -1,14 +1,26 @@
 import './global.css';
 
 import Header from './components/Header';
-import Task, { TaskProps } from './components/Task';
-import { ChangeEvent, KeyboardEventHandler, useState } from 'react';
+import Task, { TaskType } from './components/Task';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Plus from '../src/assets/plus.svg';
 
 function App() {
-  const [tasks, setTasks] = useState<TaskProps[]>([]);
+  const localStorageKey = '@ignite-todo-list:tasks-1.0.0';
+  const storedStateAsJSON = localStorage.getItem(localStorageKey);
+  let storedTasks = [];
+  if (storedStateAsJSON) storedTasks = JSON.parse(storedStateAsJSON);
+  const [tasks, setTasks] = useState<TaskType[]>(storedTasks);
   const [newTask, setNewTask] = useState('');
-  const [doneCount, setDoneCount] = useState(0);
+
+  const countNumberOfTasksDone = () => {
+    return tasks.reduce((accumulator, task) => {
+      if (task.done) return accumulator + 1;
+      else return accumulator;
+    }, 0);
+  };
+
+  const [doneCount, setDoneCount] = useState(countNumberOfTasksDone);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setNewTask(event.currentTarget.value);
@@ -18,10 +30,9 @@ function App() {
     if (event.code === 'Enter') handleCreateNewTaskButton();
   };
 
-  const handleTaskDone = (increase: boolean) => {
-    const currentCount = doneCount;
-    if (increase) setDoneCount(currentCount + 1);
-    else setDoneCount(currentCount - 1);
+  const countTasksDone = () => {
+    const count = countNumberOfTasksDone();
+    setDoneCount(count);
   };
 
   const handleDeleteTaskButton = (taskName: string) => {
@@ -31,12 +42,22 @@ function App() {
 
   const handleCreateNewTaskButton = () => {
     if (newTask.trim() === '') return;
-    setTasks([
-      ...tasks,
-      { name: newTask, onDelete: handleDeleteTaskButton, increaseDoneCount: handleTaskDone },
-    ]);
+    setTasks([...tasks, { name: newTask, done: false }]);
     setNewTask('');
   };
+
+  useEffect(() => {
+    const stateJSON = JSON.stringify(tasks);
+    localStorage.setItem(localStorageKey, stateJSON);
+  }, [tasks, doneCount]);
+
+  useEffect(() => {
+    const storedStateAsJSON = localStorage.getItem(localStorageKey);
+    if (storedStateAsJSON) {
+      const tasksStored: TaskType[] = JSON.parse(storedStateAsJSON);
+      setTasks(tasksStored);
+    }
+  }, []);
 
   return (
     <div>
@@ -70,10 +91,10 @@ function App() {
         {tasks.map((task) => {
           return (
             <Task
-              name={task.name}
+              task={task}
               key={task.name}
               onDelete={handleDeleteTaskButton}
-              increaseDoneCount={handleTaskDone}
+              changeDoneCount={countTasksDone}
             />
           );
         })}

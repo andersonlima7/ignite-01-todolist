@@ -1,32 +1,32 @@
-import { useState } from 'react';
 import trash from '../../assets/trash.svg';
 import styles from './styles.module.css';
 
-export interface TaskProps {
+export type TaskType = {
   name: string;
+  done: boolean;
+};
+export interface TaskProps {
+  task: TaskType;
   onDelete: (name: string) => void;
-  increaseDoneCount: (increase: boolean) => void;
+  changeDoneCount: () => void;
 }
 
-export default function Task({ name, onDelete, increaseDoneCount }: TaskProps) {
-  const [done, setDone] = useState(false);
-
+export default function Task({ task, onDelete, changeDoneCount }: TaskProps) {
   const handleCheckmark = () => {
-    const state = done;
-    setDone(!state);
-    if (!state) increaseDoneCount(true);
-    else increaseDoneCount(false);
+    task.done = !task.done;
+    changeDoneCount();
   };
 
   const handleDelete = () => {
-    onDelete(name);
-    if (done) increaseDoneCount(false);
+    onDelete(task.name);
+    task.done = false;
+    changeDoneCount();
   };
 
   return (
-    <div className={done ? styles['task-done'] : styles.task}>
+    <div className={task.done ? styles['task-done'] : styles.task}>
       <span onClick={() => handleCheckmark()} />
-      <p>{name}</p>
+      <p>{task.name}</p>
       <img className={styles.trash} src={trash} onClick={handleDelete} />
     </div>
   );
